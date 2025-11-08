@@ -93,13 +93,21 @@ ${content.substring(0, 1000)}`;
     const model = this.ensureModel();
 
     try {
-      const prompt = `Answer based on these notes. Be concise. If not in notes, say "No info found."
+      const prompt = `You are a helpful assistant that answers questions based on the user's saved notes.
 
-Notes:
-${context.substring(0, 3000)}
+Context (user's saved notes):
+${context.substring(0, 4000)}
 
-Q: ${question}
-A:`;
+User Question: ${question}
+
+Instructions:
+- Answer naturally and conversationally
+- If the question is about what content they have, describe it clearly
+- If comparing items, explain the differences
+- If no relevant information exists, say "I don't have any notes about that."
+- Be specific and reference the actual content from the notes
+
+Answer:`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;

@@ -125,15 +125,15 @@ export class OpenAIService implements AIService {
         messages: [
           {
             role: 'system',
-            content: 'Answer based on notes. Be concise. If not in notes, say "No info found."'
+            content: 'You are a helpful assistant that answers questions based on the user\'s saved notes. Answer naturally and conversationally. If the question is about what content they have, describe it clearly. If comparing items, explain the differences. Be specific and reference the actual content from the notes.'
           },
           {
             role: 'user',
-            content: `Notes:\n${context.substring(0, 3000)}\n\nQ: ${question}`
+            content: `Context (user's saved notes):\n${context.substring(0, 4000)}\n\nUser Question: ${question}`
           }
         ],
         temperature: 0.7,
-        max_tokens: 300
+        max_tokens: 500
       });
 
       return response.choices[0]?.message?.content?.trim() || 'No response generated.';

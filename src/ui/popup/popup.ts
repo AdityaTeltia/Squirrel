@@ -127,17 +127,40 @@ function displayNotes(notes: any[]) {
 function createNoteCard(note: any): string {
   const date = new Date(note.createdAt).toLocaleDateString();
   const tags = note.tags.map((tag: string) => `<span class="tag">${tag}</span>`).join('');
+  const isYouTube = note.source.type === 'youtube';
+  
+  // For YouTube videos, show thumbnail and play icon
+  const videoPreview = isYouTube ? `
+    <div class="video-preview">
+      <img src="${note.source.thumbnail}" alt="Video thumbnail" class="video-thumbnail">
+      <div class="play-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+      <div class="video-badge">YouTube</div>
+    </div>
+  ` : '';
+  
+  const content = isYouTube 
+    ? note.content.split('\n\n')[0] // Just show title for YouTube
+    : escapeHtml(note.content);
   
   return `
-    <div class="note-card">
-      <button class="delete-btn" data-id="${note.id}">Delete</button>
-      <div class="note-content">${escapeHtml(note.content)}</div>
+    <a href="${note.source.url}" target="_blank" class="note-card ${isYouTube ? 'video-card' : ''}">
+      ${videoPreview}
+      <button class="delete-btn" data-id="${note.id}" onclick="event.preventDefault(); event.stopPropagation();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+        </svg>
+      </button>
+      <div class="note-content">${content}</div>
       <div class="note-tags">${tags}</div>
       <div class="note-meta">
         <span>${date}</span>
-        <span>${note.source.title.substring(0, 30)}...</span>
+        <span class="source-title">${note.source.title.substring(0, 40)}...</span>
       </div>
-    </div>
+    </a>
   `;
 }
 

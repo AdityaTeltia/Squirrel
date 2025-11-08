@@ -203,12 +203,32 @@ function createNoteCard(note: any): string {
     .map((tag: string) => `<span class="tag">${escapeHtml(tag)}</span>`)
     .join('');
 
+  const isYouTube = note.source.type === 'youtube';
+  
+  // For YouTube videos, show thumbnail and play icon
+  const videoPreview = isYouTube ? `
+    <div class="video-preview">
+      <img src="${note.source.thumbnail}" alt="Video thumbnail" class="video-thumbnail">
+      <div class="play-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+      <div class="video-badge">YouTube</div>
+    </div>
+  ` : '';
+  
+  const content = isYouTube 
+    ? note.content.split('\n\n')[0] // Just show title for YouTube
+    : escapeHtml(truncate(note.content, 150));
+
   return `
-    <div class="note-card" data-id="${note.id}">
-      <div class="note-content">${escapeHtml(truncate(note.content, 150))}</div>
+    <a href="${note.source.url}" target="_blank" class="note-card ${isYouTube ? 'video-card' : ''}" data-id="${note.id}" onclick="event.preventDefault(); showNoteDetail('${note.id}');">
+      ${videoPreview}
+      <div class="note-content">${content}</div>
       ${tags ? `<div class="note-tags">${tags}</div>` : ''}
       <div class="note-meta">${date} • ${escapeHtml(truncate(note.source.title, 40))}</div>
-    </div>
+    </a>
   `;
 }
 
@@ -265,11 +285,22 @@ function appendChatMessage(role: 'user' | 'ai', content: string, sources?: any[]
   const sourcesHtml = sources && sources.length > 0 ? `
     <div class="chat-sources">
       <div class="chat-sources-title">Sources (${sources.length}):</div>
-      ${sources.map((source: any) => `
-        <div class="chat-source-item" title="${escapeHtml(source.content)}">
-          ${escapeHtml(truncate(source.content, 80))}
-        </div>
-      `).join('')}
+      ${sources.map((source: any) => {
+        const isYouTube = source.isYouTube || source.tags?.includes('youtube');
+        const badge = isYouTube ? '<span class="youtube-badge-mini">▶ YouTube</span>' : '';
+        const link = source.url ? `<a href="${source.url}" target="_blank" class="source-link">Open</a>` : '';
+        
+        return `
+          <div class="chat-source-item" title="${escapeHtml(source.content)}">
+            <div class="source-header">
+              ${badge}
+              ${link}
+            </div>
+            <div class="source-content">${escapeHtml(truncate(source.content, 80))}</div>
+            ${source.tags ? `<div class="source-tags">${source.tags.slice(0, 3).map((tag: string) => `<span class="tag-mini">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+          </div>
+        `;
+      }).join('')}
     </div>
   ` : '';
 
@@ -277,7 +308,7 @@ function appendChatMessage(role: 'user' | 'ai', content: string, sources?: any[]
     <div class="chat-message ${role}" id="${messageId}">
       <div class="chat-avatar ${role}">${avatarText}</div>
       <div class="chat-bubble ${role}">
-        ${escapeHtml(content)}
+        ${role === 'ai' ? formatAIResponse(content) : escapeHtml(content)}
         ${sourcesHtml}
       </div>
     </div>
@@ -377,4 +408,29 @@ function escapeHtml(text: string): string {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+function formatAIResponse(text: string): string {
+  // Escape HTML first for safety
+  const escaped = escapeHtml(text);
+  
+  // Split into paragraphs (double line breaks or single line breaks followed by bullets/numbers)
+  const paragraphs = escaped.split(/\n\n+/);
+  
+  // Process each paragraph
+  const formatted = paragraphs.map(para => {
+    // Convert **bold** to <strong>
+    let processed = para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    
+    // Convert *italic* to <em>
+    processed = processed.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
+    
+    // Handle single line breaks within paragraphs
+    processed = processed.replace(/\n/g, '<br>');
+    
+    // Wrap in paragraph tag
+    return `<p>${processed}</p>`;
+  }).join('');
+  
+  return formatted;
 }

@@ -218,7 +218,7 @@ export class SupabaseStorage implements StorageBackend {
     // Use pgvector's cosine similarity with lower threshold
     const { data, error } = await client.rpc('match_notes', {
       query_embedding: normalizedEmbedding,
-      match_threshold: 0.3, // Lowered from 0.7 for better recall
+      match_threshold: 0.7, // Lowered from 0.7 for better recall
       match_count: limit
     });
 

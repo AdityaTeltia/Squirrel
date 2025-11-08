@@ -138,13 +138,20 @@ ${content.substring(0, 500)}`;
     }
 
     try {
-      const prompt = `Answer based on these notes. Be concise. If not in notes, say "No info found."
+      const prompt = `You are a helpful assistant that answers questions based on the user's saved notes.
 
-Notes:
-${context.substring(0, 2000)}
+Context (user's saved notes):
+${context.substring(0, 3000)}
 
-Q: ${question}
-A:`;
+User Question: ${question}
+
+Instructions:
+- Answer naturally and conversationally
+- If the question is about what content they have, describe it clearly
+- If comparing items, explain the differences
+- Be specific and reference the actual content from the notes
+
+Answer:`;
 
       const result = await this.session.prompt(prompt);
       return result.trim();

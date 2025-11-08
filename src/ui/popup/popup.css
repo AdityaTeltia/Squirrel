@@ -323,6 +323,9 @@ body {
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .note-card:hover {
@@ -330,6 +333,59 @@ body {
   border-color: hsl(var(--ring));
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   transform: translateY(-1px);
+}
+
+.note-card.video-card {
+  border-left: 3px solid #ff0000;
+}
+
+.video-preview {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border-radius: calc(var(--radius) - 2px);
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.video-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.note-card:hover .play-icon {
+  background: rgba(255, 0, 0, 0.9);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: #ff0000;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.70rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .note-content {
