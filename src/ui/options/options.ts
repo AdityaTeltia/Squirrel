@@ -19,8 +19,7 @@ function setupEventListeners() {
   document.querySelectorAll('input[name="storage"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
       const value = (e.target as HTMLInputElement).value;
-      toggleConfigSection('supabaseConfig', value === 'supabase');
-      toggleConfigSection('supabaseKeyConfig', value === 'supabase');
+      toggleConfigPanel('supabaseConfig', value === 'supabase');
     });
   });
 
@@ -28,25 +27,34 @@ function setupEventListeners() {
   document.querySelectorAll('input[name="ai"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
       const value = (e.target as HTMLInputElement).value;
-      toggleConfigSection('openaiConfig', value === 'openai');
-      toggleConfigSection('geminiConfig', value === 'gemini');
+      toggleConfigPanel('openaiConfig', value === 'openai');
+      toggleConfigPanel('geminiConfig', value === 'gemini');
     });
   });
 
   // Save button
-  document.getElementById('saveBtn')?.addEventListener('click', saveConfig);
+  const saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', saveConfig);
+  }
 
   // Reset button
-  document.getElementById('resetBtn')?.addEventListener('click', resetConfig);
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', resetConfig);
+  }
 
   // Delete all button
-  document.getElementById('deleteAllBtn')?.addEventListener('click', deleteAllNotes);
+  const deleteAllBtn = document.getElementById('deleteAllBtn');
+  if (deleteAllBtn) {
+    deleteAllBtn.addEventListener('click', deleteAllNotes);
+  }
 }
 
-function toggleConfigSection(sectionId: string, show: boolean) {
-  const section = document.getElementById(sectionId);
-  if (section) {
-    section.style.display = show ? 'block' : 'none';
+function toggleConfigPanel(panelId: string, show: boolean) {
+  const panel = document.getElementById(panelId);
+  if (panel) {
+    panel.style.display = show ? 'block' : 'none';
   }
 }
 
@@ -64,8 +72,7 @@ async function loadConfig() {
     ) as HTMLInputElement;
     if (storageRadio) {
       storageRadio.checked = true;
-      toggleConfigSection('supabaseConfig', config.storageBackend === 'supabase');
-      toggleConfigSection('supabaseKeyConfig', config.storageBackend === 'supabase');
+      toggleConfigPanel('supabaseConfig', config.storageBackend === 'supabase');
     }
 
     // Set AI provider
@@ -74,22 +81,26 @@ async function loadConfig() {
     ) as HTMLInputElement;
     if (aiRadio) {
       aiRadio.checked = true;
-      toggleConfigSection('openaiConfig', config.aiProvider === 'openai');
-      toggleConfigSection('geminiConfig', config.aiProvider === 'gemini');
+      toggleConfigPanel('openaiConfig', config.aiProvider === 'openai');
+      toggleConfigPanel('geminiConfig', config.aiProvider === 'gemini');
     }
 
     // Set API keys and URLs
     if (config.supabaseUrl) {
-      (document.getElementById('supabaseUrl') as HTMLInputElement).value = config.supabaseUrl;
+      const supabaseUrl = document.getElementById('supabaseUrl') as HTMLInputElement;
+      if (supabaseUrl) supabaseUrl.value = config.supabaseUrl;
     }
     if (config.supabaseKey) {
-      (document.getElementById('supabaseKey') as HTMLInputElement).value = config.supabaseKey;
+      const supabaseKey = document.getElementById('supabaseKey') as HTMLInputElement;
+      if (supabaseKey) supabaseKey.value = config.supabaseKey;
     }
     if (config.openaiKey) {
-      (document.getElementById('openaiKey') as HTMLInputElement).value = config.openaiKey;
+      const openaiKey = document.getElementById('openaiKey') as HTMLInputElement;
+      if (openaiKey) openaiKey.value = config.openaiKey;
     }
     if (config.geminiKey) {
-      (document.getElementById('geminiKey') as HTMLInputElement).value = config.geminiKey;
+      const geminiKey = document.getElementById('geminiKey') as HTMLInputElement;
+      if (geminiKey) geminiKey.value = config.geminiKey;
     }
   } catch (error) {
     console.error('Failed to load config:', error);
@@ -109,8 +120,11 @@ async function saveConfig() {
 
     // Get Supabase credentials if selected
     if (storageBackend === 'supabase') {
-      const supabaseUrl = (document.getElementById('supabaseUrl') as HTMLInputElement).value.trim();
-      const supabaseKey = (document.getElementById('supabaseKey') as HTMLInputElement).value.trim();
+      const supabaseUrlInput = document.getElementById('supabaseUrl') as HTMLInputElement;
+      const supabaseKeyInput = document.getElementById('supabaseKey') as HTMLInputElement;
+      
+      const supabaseUrl = supabaseUrlInput?.value.trim();
+      const supabaseKey = supabaseKeyInput?.value.trim();
 
       if (!supabaseUrl || !supabaseKey) {
         showStatus('Please provide both Supabase URL and API key', 'error');
@@ -123,7 +137,8 @@ async function saveConfig() {
 
     // Get OpenAI API key if selected
     if (aiProvider === 'openai') {
-      const openaiKey = (document.getElementById('openaiKey') as HTMLInputElement).value.trim();
+      const openaiKeyInput = document.getElementById('openaiKey') as HTMLInputElement;
+      const openaiKey = openaiKeyInput?.value.trim();
       
       if (!openaiKey) {
         showStatus('Please provide OpenAI API key', 'error');
@@ -135,7 +150,8 @@ async function saveConfig() {
 
     // Get Gemini API key if selected
     if (aiProvider === 'gemini') {
-      const geminiKey = (document.getElementById('geminiKey') as HTMLInputElement).value.trim();
+      const geminiKeyInput = document.getElementById('geminiKey') as HTMLInputElement;
+      const geminiKey = geminiKeyInput?.value.trim();
       
       if (!geminiKey) {
         showStatus('Please provide Gemini API key', 'error');
@@ -175,18 +191,23 @@ async function resetConfig() {
     });
 
     // Clear form
-    (document.querySelector('input[name="storage"][value="indexdb"]') as HTMLInputElement).checked = true;
-    (document.querySelector('input[name="ai"][value="chrome"]') as HTMLInputElement).checked = true;
+    const indexdbRadio = document.querySelector('input[name="storage"][value="indexdb"]') as HTMLInputElement;
+    const chromeRadio = document.querySelector('input[name="ai"][value="chrome"]') as HTMLInputElement;
     
-    (document.getElementById('supabaseUrl') as HTMLInputElement).value = '';
-    (document.getElementById('supabaseKey') as HTMLInputElement).value = '';
-    (document.getElementById('openaiKey') as HTMLInputElement).value = '';
-    (document.getElementById('geminiKey') as HTMLInputElement).value = '';
+    if (indexdbRadio) indexdbRadio.checked = true;
+    if (chromeRadio) chromeRadio.checked = true;
+    
+    // Clear inputs
+    const inputs = ['supabaseUrl', 'supabaseKey', 'openaiKey', 'geminiKey'];
+    inputs.forEach(id => {
+      const input = document.getElementById(id) as HTMLInputElement;
+      if (input) input.value = '';
+    });
 
-    toggleConfigSection('supabaseConfig', false);
-    toggleConfigSection('supabaseKeyConfig', false);
-    toggleConfigSection('openaiConfig', false);
-    toggleConfigSection('geminiConfig', false);
+    // Hide config panels
+    toggleConfigPanel('supabaseConfig', false);
+    toggleConfigPanel('openaiConfig', false);
+    toggleConfigPanel('geminiConfig', false);
 
     showStatus('Settings reset to defaults', 'success');
   } catch (error) {
@@ -196,7 +217,7 @@ async function resetConfig() {
 }
 
 async function deleteAllNotes() {
-  if (!confirm('Delete ALL notes? This action cannot be undone!')) {
+  if (!confirm('⚠️ Delete ALL notes?\n\nThis action cannot be undone!')) {
     return;
   }
 
@@ -220,9 +241,8 @@ function showStatus(message: string, type: 'success' | 'error') {
   status.textContent = message;
   status.className = `status ${type} show`;
 
-  // Hide after 3 seconds
+  // Hide after 4 seconds
   setTimeout(() => {
     status.classList.remove('show');
-  }, 3000);
+  }, 4000);
 }
-

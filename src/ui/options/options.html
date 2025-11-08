@@ -3,137 +3,262 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Notes - Settings</title>
+  <title>Squirrel - Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
   <div class="container">
+    <!-- Header -->
     <header class="header">
-      <h1>Settings</h1>
-      <p class="subtitle">Configure your storage backend and AI provider</p>
+      <div class="logo">
+        <span class="logo-icon">🐿️</span>
+        <div class="logo-text">
+          <h1>Squirrel Settings</h1>
+          <span class="tagline">Configure your knowledge vault</span>
+        </div>
+      </div>
     </header>
 
-    <main>
-      <section class="section">
-        <h2 class="section-title">Storage Backend</h2>
-        
-        <div class="form-group">
-          <label class="form-label">Choose where your notes are stored</label>
-          
-          <div class="radio-group">
-            <label class="radio-option">
+    <!-- Main Content -->
+    <main class="main">
+      <div class="content-wrapper">
+        <!-- Storage Section -->
+        <section class="section">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="section-title">Storage Backend</h2>
+              <p class="section-description">Choose where your notes are stored</p>
+            </div>
+          </div>
+
+          <div class="options-group">
+            <label class="option-card">
               <input type="radio" name="storage" value="indexdb" checked />
-              <div class="radio-label">
-                <div class="radio-title">IndexedDB (Local)</div>
-                <div class="radio-description">Store all notes locally in your browser. Fast, private, and works offline.</div>
+              <div class="option-content">
+                <div class="option-header">
+                  <div class="option-title">
+                    <span class="option-name">IndexedDB</span>
+                    <span class="badge badge-default">Default</span>
+                  </div>
+                  <span class="radio-indicator"></span>
+                </div>
+                <p class="option-description">Store all notes locally in your browser. Fast, private, and works offline. Perfect for most users.</p>
+                <div class="option-features">
+                  <span class="feature">✓ Local storage</span>
+                  <span class="feature">✓ No setup required</span>
+                  <span class="feature">✓ Fast access</span>
+                </div>
               </div>
             </label>
 
-            <label class="radio-option">
+            <label class="option-card">
               <input type="radio" name="storage" value="supabase" />
-              <div class="radio-label">
-                <div class="radio-title">Supabase (Cloud)</div>
-                <div class="radio-description">Sync notes across devices using Supabase with pgvector for better semantic search.</div>
+              <div class="option-content">
+                <div class="option-header">
+                  <div class="option-title">
+                    <span class="option-name">Supabase</span>
+                    <span class="badge badge-premium">Cloud</span>
+                  </div>
+                  <span class="radio-indicator"></span>
+                </div>
+                <p class="option-description">Sync notes across devices using Supabase with pgvector for better semantic search.</p>
+                <div class="option-features">
+                  <span class="feature">✓ Cross-device sync</span>
+                  <span class="feature">✓ Better vector search</span>
+                  <span class="feature">✓ Cloud backup</span>
+                </div>
               </div>
             </label>
           </div>
-        </div>
 
-        <div id="supabaseConfig" class="form-group" style="display: none;">
-          <label class="form-label" for="supabaseUrl">Supabase URL</label>
-          <input type="url" id="supabaseUrl" class="form-control" placeholder="https://your-project.supabase.co" />
-          <p class="form-description">Your Supabase project URL</p>
-        </div>
+          <!-- Supabase Config -->
+          <div id="supabaseConfig" class="config-panel" style="display: none;">
+            <div class="form-group">
+              <label class="form-label" for="supabaseUrl">
+                <span>Supabase Project URL</span>
+                <span class="label-hint">Required</span>
+              </label>
+              <input 
+                type="url" 
+                id="supabaseUrl" 
+                class="input" 
+                placeholder="https://your-project.supabase.co"
+                aria-label="Supabase URL"
+              />
+              <p class="form-hint">Find this in your Supabase project settings</p>
+            </div>
 
-        <div id="supabaseKeyConfig" class="form-group" style="display: none;">
-          <label class="form-label" for="supabaseKey">Supabase API Key</label>
-          <input type="password" id="supabaseKey" class="form-control" placeholder="Your anon/public key" />
-          <p class="form-description">Your API key is stored securely in Chrome storage</p>
-        </div>
-      </section>
+            <div class="form-group">
+              <label class="form-label" for="supabaseKey">
+                <span>Supabase API Key</span>
+                <span class="label-hint">Required</span>
+              </label>
+              <input 
+                type="password" 
+                id="supabaseKey" 
+                class="input" 
+                placeholder="eyJ..."
+                aria-label="Supabase API Key"
+              />
+              <p class="form-hint">Your anon/public key (stored securely in Chrome storage)</p>
+            </div>
+          </div>
+        </section>
 
-      <section class="section">
-        <h2 class="section-title">AI Provider</h2>
-        
-        <div class="form-group">
-          <label class="form-label">Choose which AI service to use</label>
-          
-          <div class="radio-group">
-            <label class="radio-option">
+        <!-- AI Provider Section -->
+        <section class="section">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="section-title">AI Provider</h2>
+              <p class="section-description">Choose which AI service powers your search and tagging</p>
+            </div>
+          </div>
+
+          <div class="options-group">
+            <label class="option-card">
               <input type="radio" name="ai" value="chrome" checked />
-              <div class="radio-label">
-                <div class="radio-title">Chrome AI</div>
-                <div class="radio-description">Use Chrome's built-in AI models. Free, private, and works offline. Requires Chrome Canary with flags enabled.</div>
+              <div class="option-content">
+                <div class="option-header">
+                  <div class="option-title">
+                    <span class="option-name">Chrome AI</span>
+                    <span class="badge badge-default">Default</span>
+                  </div>
+                  <span class="radio-indicator"></span>
+                </div>
+                <p class="option-description">Use Chrome's built-in AI models. Free, private, and works offline.</p>
+                <div class="option-features">
+                  <span class="feature">✓ 100% free</span>
+                  <span class="feature">✓ Works offline</span>
+                  <span class="feature">✓ Privacy-first</span>
+                </div>
+                <p class="option-note">Requires Chrome Canary with flags enabled</p>
               </div>
             </label>
 
-            <label class="radio-option">
+            <label class="option-card">
               <input type="radio" name="ai" value="openai" />
-              <div class="radio-label">
-                <div class="radio-title">OpenAI</div>
-                <div class="radio-description">Use GPT-4 and text-embedding-3-small for the most powerful AI capabilities.</div>
+              <div class="option-content">
+                <div class="option-header">
+                  <div class="option-title">
+                    <span class="option-name">OpenAI</span>
+                    <span class="badge badge-premium">API Key</span>
+                  </div>
+                  <span class="radio-indicator"></span>
+                </div>
+                <p class="option-description">Use GPT-4 and text-embedding-3-small for the most powerful AI capabilities.</p>
+                <div class="option-features">
+                  <span class="feature">✓ Most accurate</span>
+                  <span class="feature">✓ Best embeddings</span>
+                  <span class="feature">✓ Advanced features</span>
+                </div>
               </div>
             </label>
 
-            <label class="radio-option">
+            <label class="option-card">
               <input type="radio" name="ai" value="gemini" />
-              <div class="radio-label">
-                <div class="radio-title">Google Gemini</div>
-                <div class="radio-description">Use Google's Gemini Pro model with embedding-001 for semantic search.</div>
+              <div class="option-content">
+                <div class="option-header">
+                  <div class="option-title">
+                    <span class="option-name">Google Gemini</span>
+                    <span class="badge badge-premium">API Key</span>
+                  </div>
+                  <span class="radio-indicator"></span>
+                </div>
+                <p class="option-description">Use Google's Gemini 2.5 Flash model for fast and accurate results.</p>
+                <div class="option-features">
+                  <span class="feature">✓ Very fast</span>
+                  <span class="feature">✓ Good quality</span>
+                  <span class="feature">✓ Free tier</span>
+                </div>
               </div>
             </label>
           </div>
-        </div>
 
-        <div id="openaiConfig" class="form-group" style="display: none;">
-          <label class="form-label" for="openaiKey">OpenAI API Key</label>
-          <input type="password" id="openaiKey" class="form-control" placeholder="sk-..." />
-          <p class="form-description">Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a></p>
-        </div>
+          <!-- OpenAI Config -->
+          <div id="openaiConfig" class="config-panel" style="display: none;">
+            <div class="form-group">
+              <label class="form-label" for="openaiKey">
+                <span>OpenAI API Key</span>
+                <span class="label-hint">Required</span>
+              </label>
+              <input 
+                type="password" 
+                id="openaiKey" 
+                class="input" 
+                placeholder="sk-..."
+                aria-label="OpenAI API Key"
+              />
+              <p class="form-hint">Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" class="link">platform.openai.com</a></p>
+            </div>
+          </div>
 
-        <div id="geminiConfig" class="form-group" style="display: none;">
-          <label class="form-label" for="geminiKey">Gemini API Key</label>
-          <input type="password" id="geminiKey" class="form-control" placeholder="AI..." />
-          <p class="form-description">Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank">makersuite.google.com</a></p>
-        </div>
-      </section>
+          <!-- Gemini Config -->
+          <div id="geminiConfig" class="config-panel" style="display: none;">
+            <div class="form-group">
+              <label class="form-label" for="geminiKey">
+                <span>Gemini API Key</span>
+                <span class="label-hint">Required</span>
+              </label>
+              <input 
+                type="password" 
+                id="geminiKey" 
+                class="input" 
+                placeholder="AI..."
+                aria-label="Gemini API Key"
+              />
+              <p class="form-hint">Get your API key from <a href="https://ai.google.dev/" target="_blank" class="link">ai.google.dev</a></p>
+            </div>
+          </div>
+        </section>
 
-      <section class="section">
-        <h2 class="section-title">Setup Instructions</h2>
-        
-        <div class="info-box">
-          <strong>Chrome AI Setup:</strong><br>
-          1. Install Chrome Canary or Chrome Dev<br>
-          2. Enable flags at chrome://flags/#optimization-guide-on-device-model and chrome://flags/#prompt-api-for-gemini-nano<br>
-          3. Restart Chrome (AI model downloads automatically, ~2GB)
-        </div>
+        <!-- Danger Zone -->
+        <section class="section section-danger">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="section-title">Danger Zone</h2>
+              <p class="section-description">Irreversible actions. Proceed with caution.</p>
+            </div>
+          </div>
 
-        <div class="info-box">
-          <strong>Supabase Setup:</strong><br>
-          1. Create account at supabase.com<br>
-          2. Create new project<br>
-          3. Run SQL setup script to create notes table with pgvector<br>
-          4. Copy your project URL and anon key
-        </div>
-      </section>
-
-      <section class="section danger-zone">
-        <h2 class="section-title">Danger Zone</h2>
-        
-        <div class="form-group">
-          <label class="form-label">Delete All Notes</label>
-          <p class="form-description">This will permanently delete all your notes. This action cannot be undone.</p>
-          <button id="deleteAllBtn" class="btn btn-danger">Delete All Notes</button>
-        </div>
-      </section>
-
-      <div class="actions">
-        <button id="resetBtn" class="btn btn-secondary">Reset to Defaults</button>
-        <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+          <div class="danger-panel">
+            <div class="danger-item">
+              <div>
+                <h3 class="danger-title">Delete All Notes</h3>
+                <p class="danger-description">Permanently delete all your saved notes. This action cannot be undone.</p>
+              </div>
+              <button id="deleteAllBtn" class="btn-danger">Delete All</button>
+            </div>
+          </div>
+        </section>
       </div>
-
-      <div id="status" class="status"></div>
     </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-actions">
+        <button id="resetBtn" class="btn-secondary">Reset to Defaults</button>
+        <button id="saveBtn" class="btn-primary">Save Changes</button>
+      </div>
+      <div id="status" class="status"></div>
+    </footer>
   </div>
 
   <script src="options.js"></script>
