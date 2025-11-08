@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Notes - Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Settings</h1>
+      <p class="subtitle">Configure your storage backend and AI provider</p>
+    </header>
+
+    <main>
+      <section class="section">
+        <h2 class="section-title">Storage Backend</h2>
+        
+        <div class="form-group">
+          <label class="form-label">Choose where your notes are stored</label>
+          
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="storage" value="indexdb" checked />
+              <div class="radio-label">
+                <div class="radio-title">IndexedDB (Local)</div>
+                <div class="radio-description">Store all notes locally in your browser. Fast, private, and works offline.</div>
+              </div>
+            </label>
+
+            <label class="radio-option">
+              <input type="radio" name="storage" value="supabase" />
+              <div class="radio-label">
+                <div class="radio-title">Supabase (Cloud)</div>
+                <div class="radio-description">Sync notes across devices using Supabase with pgvector for better semantic search.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div id="supabaseConfig" class="form-group" style="display: none;">
+          <label class="form-label" for="supabaseUrl">Supabase URL</label>
+          <input type="url" id="supabaseUrl" class="form-control" placeholder="https://your-project.supabase.co" />
+          <p class="form-description">Your Supabase project URL</p>
+        </div>
+
+        <div id="supabaseKeyConfig" class="form-group" style="display: none;">
+          <label class="form-label" for="supabaseKey">Supabase API Key</label>
+          <input type="password" id="supabaseKey" class="form-control" placeholder="Your anon/public key" />
+          <p class="form-description">Your API key is stored securely in Chrome storage</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">AI Provider</h2>
+        
+        <div class="form-group">
+          <label class="form-label">Choose which AI service to use</label>
+          
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="ai" value="chrome" checked />
+              <div class="radio-label">
+                <div class="radio-title">Chrome AI</div>
+                <div class="radio-description">Use Chrome's built-in AI models. Free, private, and works offline. Requires Chrome Canary with flags enabled.</div>
+              </div>
+            </label>
+
+            <label class="radio-option">
+              <input type="radio" name="ai" value="openai" />
+              <div class="radio-label">
+                <div class="radio-title">OpenAI</div>
+                <div class="radio-description">Use GPT-4 and text-embedding-3-small for the most powerful AI capabilities.</div>
+              </div>
+            </label>
+
+            <label class="radio-option">
+              <input type="radio" name="ai" value="gemini" />
+              <div class="radio-label">
+                <div class="radio-title">Google Gemini</div>
+                <div class="radio-description">Use Google's Gemini Pro model with embedding-001 for semantic search.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div id="openaiConfig" class="form-group" style="display: none;">
+          <label class="form-label" for="openaiKey">OpenAI API Key</label>
+          <input type="password" id="openaiKey" class="form-control" placeholder="sk-..." />
+          <p class="form-description">Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a></p>
+        </div>
+
+        <div id="geminiConfig" class="form-group" style="display: none;">
+          <label class="form-label" for="geminiKey">Gemini API Key</label>
+          <input type="password" id="geminiKey" class="form-control" placeholder="AI..." />
+          <p class="form-description">Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank">makersuite.google.com</a></p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Setup Instructions</h2>
+        
+        <div class="info-box">
+          <strong>Chrome AI Setup:</strong><br>
+          1. Install Chrome Canary or Chrome Dev<br>
+          2. Enable flags at chrome://flags/#optimization-guide-on-device-model and chrome://flags/#prompt-api-for-gemini-nano<br>
+          3. Restart Chrome (AI model downloads automatically, ~2GB)
+        </div>
+
+        <div class="info-box">
+          <strong>Supabase Setup:</strong><br>
+          1. Create account at supabase.com<br>
+          2. Create new project<br>
+          3. Run SQL setup script to create notes table with pgvector<br>
+          4. Copy your project URL and anon key
+        </div>
+      </section>
+
+      <section class="section danger-zone">
+        <h2 class="section-title">Danger Zone</h2>
+        
+        <div class="form-group">
+          <label class="form-label">Delete All Notes</label>
+          <p class="form-description">This will permanently delete all your notes. This action cannot be undone.</p>
+          <button id="deleteAllBtn" class="btn btn-danger">Delete All Notes</button>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button id="resetBtn" class="btn btn-secondary">Reset to Defaults</button>
+        <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </main>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
