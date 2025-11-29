@@ -4,6 +4,9 @@
 
 AI-powered Chrome extension that helps you save, organize, and search through web content with the enthusiasm of a squirrel preparing for winter. Because let's face it, we all hoard information anyway.
 
+<img width="1199" height="718" alt="image" src="https://github.com/user-attachments/assets/89f65f90-c6c4-41d6-9ad2-b8e05fd8fc2f" />
+
+
 ## Features
 
 - **One-Click Save**: Right-click selected text → "Save to AI Notes"
