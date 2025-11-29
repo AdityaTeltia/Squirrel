@@ -165,17 +165,6 @@ bun run clean
 
 **Build Warning**: The service worker bundle size warning (~940KB) is expected due to AI libraries.
 
-## Project Structure
-
-```
-src/
-├── ai/              # AI service implementations
-├── storage/         # Storage backends (IndexedDB, Supabase)
-├── background/      # Service worker
-├── content/         # Content script
-├── ui/              # Popup, search page, settings
-└── utils/           # Utilities (vector, tags, etc.)
-```
 
 ## Next Steps
 
